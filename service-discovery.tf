@@ -36,36 +36,3 @@ resource "aws_service_discovery_service" "backend_service" {
   })
 }
 
-# Service Discovery Namespace for AWS Assistant Agents
-resource "aws_service_discovery_private_dns_namespace" "aws_assistant_namespace" {
-  name        = "aws-assistant.local"
-  description = "Service discovery namespace for AWS Assistant agents"
-  vpc         = local.vpc_id
-
-  tags = merge(local.common_tags, {
-    Name = "aws-assistant.local"
-    Type = "service-discovery-namespace"
-  })
-}
-
-# Service Discovery Service for AWS Assistant Agents
-resource "aws_service_discovery_service" "aws_assistant_agent_service" {
-  name          = "aws-assistant-agent"
-  force_destroy = true
-
-  dns_config {
-    namespace_id = aws_service_discovery_private_dns_namespace.aws_assistant_namespace.id
-
-    dns_records {
-      ttl  = 60
-      type = "A"
-    }
-
-    routing_policy = "MULTIVALUE"
-  }
-
-  tags = merge(local.common_tags, {
-    Name = "aws-assistant-agent"
-    Type = "service-discovery-service"
-  })
-}

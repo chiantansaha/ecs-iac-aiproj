@@ -189,6 +189,12 @@ variable "llm_logs_bucket_name" {
   default     = ""
 }
 
+variable "my_team1_s3_bucket_name" {
+  description = "Name of the existing S3 bucket for team1 documents."
+  type        = string
+  default     = ""
+}
+
 # IAM MCP Server Configuration
 
 variable "iam_max_policy_size" {

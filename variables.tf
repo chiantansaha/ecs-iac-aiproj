@@ -1,4 +1,4 @@
-
+# Variables file 
 
 variable "name" {
   description = "The name of this template (e.g., my-app-prod)"
@@ -181,6 +181,12 @@ variable "cloudwatch_alarm_actions" {
   description = "List of ARNs for CloudWatch alarm actions (e.g., SNS topics)"
   type        = list(string)
   default     = []
+}
+
+variable "llm_logs_bucket_name" {
+  description = "Name of an existing S3 bucket used for LLM logs. Leave empty to skip external LLM logs bucket usage."
+  type        = string
+  default     = ""
 }
 
 # IAM MCP Server Configuration

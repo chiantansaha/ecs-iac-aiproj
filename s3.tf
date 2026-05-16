@@ -70,42 +70,9 @@ resource "aws_s3_bucket_public_access_block" "main" {
   restrict_public_buckets = true
 }
 
-# bucket for storing llm logs
-resource "aws_s3_bucket" "llm_logs" {
-  bucket        = "${var.name}-llm-logs-${local.account_id}"
-  force_destroy = true
-}
-
-resource "aws_s3_bucket_server_side_encryption_configuration" "llm_logs" {
-  bucket = aws_s3_bucket.llm_logs.id
-
-  rule {
-    apply_server_side_encryption_by_default {
-      sse_algorithm = "AES256"
-    }
-    bucket_key_enabled = true
-  }
-}
-
-resource "aws_s3_bucket_lifecycle_configuration" "llm_logs" {
-  bucket = aws_s3_bucket.llm_logs.id
-
-  rule {
-    id     = "log_retention"
-    status = "Enabled"
-
-    transition {
-      days          = 30
-      storage_class = "STANDARD_IA"
-    }
-
-    transition {
-      days          = 60
-      storage_class = "GLACIER"
-    }
-
-    expiration {
-      days = 90
-    }
-  }
+# Optional existing bucket for storing LLM logs
+# If you want to use an existing bucket, set llm_logs_bucket_name in terraform.tfvars.
+data "aws_s3_bucket" "llm_logs" {
+  count  = var.llm_logs_bucket_name != "" ? 1 : 0
+  bucket = var.llm_logs_bucket_name
 }

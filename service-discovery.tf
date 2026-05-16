@@ -4,7 +4,7 @@ resource "aws_service_discovery_private_dns_namespace" "team_namespace" {
 
   name        = "${each.value}.local"
   description = "Service discovery namespace for ${each.value} development environment"
-  vpc         = var.vpc_id
+  vpc         = local.vpc_id
 
   tags = merge(local.team_tags[each.value], {
     Name = "${each.value}.local"
@@ -40,7 +40,7 @@ resource "aws_service_discovery_service" "backend_service" {
 resource "aws_service_discovery_private_dns_namespace" "aws_assistant_namespace" {
   name        = "aws-assistant.local"
   description = "Service discovery namespace for AWS Assistant agents"
-  vpc         = var.vpc_id
+  vpc         = local.vpc_id
 
   tags = merge(local.common_tags, {
     Name = "aws-assistant.local"

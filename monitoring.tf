@@ -14,7 +14,7 @@ resource "aws_cloudwatch_metric_alarm" "aws_assistant_agent_cpu_utilization" {
   alarm_actions       = var.cloudwatch_alarm_actions
 
   dimensions = {
-    ServiceName = module.aws_assistant_agent_service.name
+    ServiceName = module.aws_assistant_agent_service[0].name
     ClusterName = module.aws_assistant_ecs_cluster.name
   }
 
@@ -34,7 +34,7 @@ resource "aws_cloudwatch_metric_alarm" "aws_assistant_agent_memory_utilization" 
   alarm_actions       = var.cloudwatch_alarm_actions
 
   dimensions = {
-    ServiceName = module.aws_assistant_agent_service.name
+    ServiceName = module.aws_assistant_agent_service[0].name
     ClusterName = module.aws_assistant_ecs_cluster.name
   }
 
@@ -54,7 +54,7 @@ resource "aws_cloudwatch_metric_alarm" "aws_assistant_agent_running_count" {
   alarm_actions       = var.cloudwatch_alarm_actions
 
   dimensions = {
-    ServiceName = module.aws_assistant_agent_service.name
+    ServiceName = module.aws_assistant_agent_service[0].name
     ClusterName = module.aws_assistant_ecs_cluster.name
   }
 
@@ -76,7 +76,7 @@ resource "aws_cloudwatch_dashboard" "aws_assistant_dashboard" {
 
         properties = {
           metrics = [
-            ["AWS/ECS", "CPUUtilization", "ServiceName", module.aws_assistant_agent_service.name, "ClusterName", module.aws_assistant_ecs_cluster.name],
+            ["AWS/ECS", "CPUUtilization", "ServiceName", module.aws_assistant_agent_service[0].name, "ClusterName", module.aws_assistant_ecs_cluster.name],
             [".", "MemoryUtilization", ".", ".", ".", "."],
             [".", "RunningCount", ".", ".", ".", "."]
           ]

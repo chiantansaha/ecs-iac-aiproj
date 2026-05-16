@@ -1,6 +1,6 @@
 # Multi-team Frontend Services
 module "frontend_service" {
-  for_each = toset(local.teams)
+  for_each = length(local.private_subnet_ids) > 0 ? toset(local.teams) : toset([])
 
   source  = "terraform-aws-modules/ecs/aws//modules/service"
   version = "~> 6.7.0"
@@ -127,7 +127,7 @@ module "frontend_service" {
     }
   }
 
-  subnet_ids = [data.aws_subnets.private.ids[0]]
+  subnet_ids = [local.private_subnet_ids[0]]
 
   tags = merge(local.team_tags[each.value], {
     Type = "frontend"
@@ -136,7 +136,7 @@ module "frontend_service" {
 
 # Multi-team Backend Services
 module "backend_service" {
-  for_each = toset(local.teams)
+  for_each = length(local.private_subnet_ids) > 0 ? toset(local.teams) : toset([])
 
   source  = "terraform-aws-modules/ecs/aws//modules/service"
   version = "~> 6.7.0"
@@ -248,7 +248,7 @@ module "backend_service" {
     }
   }
 
-  subnet_ids = [data.aws_subnets.private.ids[0]]
+  subnet_ids = [local.private_subnet_ids[0]]
 
   tags = merge(local.team_tags[each.value], {
     Type = "backend"
@@ -257,6 +257,8 @@ module "backend_service" {
 
 # AWS Assistant Agent Service
 module "aws_assistant_agent_service" {
+  count = length(local.private_subnet_ids) > 0 ? 1 : 0
+
   source  = "terraform-aws-modules/ecs/aws//modules/service"
   version = "~> 6.7.0"
 
@@ -387,7 +389,7 @@ module "aws_assistant_agent_service" {
     }
   }
 
-  subnet_ids = data.aws_subnets.private.ids
+  subnet_ids = local.private_subnet_ids
 
   tags = merge(local.common_tags, {
     Type = "aws-assistant-agent"

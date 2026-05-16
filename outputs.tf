@@ -25,22 +25,22 @@ output "ecs_cluster_arns" {
 
 output "frontend_service_names" {
   description = "The names of the frontend services"
-  value       = { for team in local.teams : team => module.frontend_service[team].name }
+  value       = { for team in local.teams : team => length(local.private_subnet_ids) > 0 ? module.frontend_service[team].name : "not_created" }
 }
 
 output "frontend_service_ids" {
   description = "The IDs of the frontend services"
-  value       = { for team in local.teams : team => module.frontend_service[team].id }
+  value       = { for team in local.teams : team => length(local.private_subnet_ids) > 0 ? module.frontend_service[team].id : "not_created" }
 }
 
 output "backend_service_names" {
   description = "The names of the backend services"
-  value       = { for team in local.teams : team => module.backend_service[team].name }
+  value       = { for team in local.teams : team => length(local.private_subnet_ids) > 0 ? module.backend_service[team].name : "not_created" }
 }
 
 output "backend_service_ids" {
   description = "The IDs of the backend services"
-  value       = { for team in local.teams : team => module.backend_service[team].id }
+  value       = { for team in local.teams : team => length(local.private_subnet_ids) > 0 ? module.backend_service[team].id : "not_created" }
 }
 
 output "frontend_ecr_repository_urls" {
@@ -95,12 +95,12 @@ output "aws_assistant_ecs_cluster_arn" {
 
 output "aws_assistant_agent_service_name" {
   description = "Name of the AWS Assistant agent service"
-  value       = module.aws_assistant_agent_service.name
+  value       = length(local.private_subnet_ids) > 0 ? module.aws_assistant_agent_service[0].name : "not_created"
 }
 
 output "aws_assistant_agent_service_id" {
   description = "ID of the AWS Assistant agent service"
-  value       = module.aws_assistant_agent_service.id
+  value       = length(local.private_subnet_ids) > 0 ? module.aws_assistant_agent_service[0].id : "not_created"
 }
 
 output "aws_assistant_agent_task_role_arn" {

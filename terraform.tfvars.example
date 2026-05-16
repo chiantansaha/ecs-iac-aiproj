@@ -1,7 +1,5 @@
-team_name = "alpha"
-name = "agent"
 tags = {
-  app = "agent"
+  app = "AWSUGSGAPP"
 }
 
 # Existing VPC infrastructure (subnets auto-discovered by tags)
@@ -67,39 +65,16 @@ enable_ecs_dual_stack_ipv6         = false  # Enable for IPv6 support
 ecs_availability_zone_rebalancing  = "ENABLED"
 
 # Cost optimization: CloudWatch log retention (days)
-log_retention_days = 7# Lamb
-da MCP Server Configuration
+log_retention_days = 7
+
+# MCP Server Configuration
 project_name = "aws-assistant"
 environment = "development"
 service_version = "1.0.0"
 log_level = "INFO"
 
-# Lambda Function Settings
-lambda_timeout_seconds = 30
-lambda_log_retention_days = 14
+# Enable X-Ray tracing
 enable_xray_tracing = true
-
-# VPC Configuration for Lambda (optional)
-enable_lambda_vpc_access = false
-# lambda_subnet_ids = ["subnet-12345678", "subnet-87654321"]
-
-# Lambda Function URLs (optional - for direct HTTP access)
-enable_lambda_function_urls = false
 
 # CloudWatch Monitoring
 # cloudwatch_alarm_actions = ["arn:aws:sns:us-east-1:123456789012:alerts"]
-
-# IAM MCP Server Configuration
-iam_lambda_memory_size = 256
-iam_max_policy_size = 10240
-iam_max_results_per_query = 100
-iam_enable_policy_simulation = true
-iam_cache_ttl_seconds = 300
-
-# CloudTrail MCP Server Configuration
-cloudtrail_lambda_memory_size = 512
-cloudtrail_max_events_per_query = 50
-cloudtrail_default_time_range_hours = 24
-cloudtrail_max_time_range_days = 90
-cloudtrail_enable_event_filtering = true
-cloudtrail_cache_ttl_seconds = 600

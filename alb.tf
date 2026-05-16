@@ -24,7 +24,7 @@ module "alb" {
   drop_invalid_header_fields       = true
 
   vpc_id  = local.vpc_id
-  subnets = slice(data.aws_subnets.private.ids, 0, 2)
+  subnets = length(local.private_subnet_ids) >= 2 ? slice(local.private_subnet_ids, 0, 2) : local.private_subnet_ids
 
   security_group_ingress_rules = merge(
     {
@@ -56,7 +56,7 @@ module "alb" {
   security_group_egress_rules = {
     vpc_cidr = {
       ip_protocol = "-1"
-      cidr_ipv4   = data.aws_vpc.selected.cidr_block
+      cidr_ipv4   = var.vpc_id != "" ? data.aws_vpc.selected[0].cidr_block : data.aws_vpc.default[0].cidr_block
     }
     https_outbound = {
       from_port   = 443

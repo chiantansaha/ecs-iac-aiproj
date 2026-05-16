@@ -1,0 +1,105 @@
+team_name = "alpha"
+name = "agent"
+tags = {
+  app = "agent"
+}
+
+# Existing VPC infrastructure (subnets auto-discovered by tags)
+vpc_id = "vpc-12345678"
+
+# Restrict web interface access to specific IP addresses
+# Replace with your actual IP addresses/CIDR blocks
+allowed_ips = [
+  "203.0.113.0/24",    # Example office network
+  "198.51.100.5/32",   # Example specific IP
+  "192.0.2.0/24"       # Example home network
+]
+
+# AgentCore Configuration
+# Enable VPC mode for AgentCore agents (default: true)
+enable_agentcore_vpc_mode = true
+
+# Optional: Custom AgentCore agents configuration
+# If not specified, uses module defaults (aws_docs_agent, aws_blog_agent, orchestrator_agent)
+# agentcore_agents = {
+#   custom_agent = {
+#     name        = "custom_agent"
+#     description = "Custom agent description"
+#     entrypoint  = "agents/custom_agent/agent.py"
+#   }
+# }
+
+# Optional: Custom AgentCore memory configuration
+# If not specified, uses module defaults
+# agentcore_memory_config = {
+#   name              = "custom_memory"
+#   description       = "Custom memory configuration"
+#   event_expiry_days = 30
+#   strategies = [{
+#     type        = "semanticMemoryStrategy"
+#     name        = "custom_semantic"
+#     description = "Custom semantic memory"
+#     namespaces  = ["conversations/{sessionId}"]
+#   }]
+# }
+
+# Optional: ACM certificate ARN for HTTPS support
+acm_certificate_arn = "arn:aws:acm:<region>:<account-id>:certificate/<certificate-id>"
+
+# ALB Logging Configuration
+alb_access_logs_enabled = true
+alb_connection_logs_enabled = true
+
+# Cost optimization: ALB minimum capacity units (10 = 60% savings)
+alb_minimum_capacity_units = 10
+
+# ALB Performance Configuration
+alb_idle_timeout         = 60
+enable_alb_waf_fail_open = false
+
+# ECS Runtime Platform (X86_64 or ARM64)
+# ARM64 provides 20% cost savings and better performance per watt
+ecs_runtime_platform = "X86_64"  # Change to "ARM64" for Graviton2/3
+
+# ECS Advanced Features
+enable_ecs_container_insights      = true   # Enable for production monitoring
+enable_ecs_dual_stack_ipv6         = false  # Enable for IPv6 support
+ecs_availability_zone_rebalancing  = "ENABLED"
+
+# Cost optimization: CloudWatch log retention (days)
+log_retention_days = 7# Lamb
+da MCP Server Configuration
+project_name = "aws-assistant"
+environment = "development"
+service_version = "1.0.0"
+log_level = "INFO"
+
+# Lambda Function Settings
+lambda_timeout_seconds = 30
+lambda_log_retention_days = 14
+enable_xray_tracing = true
+
+# VPC Configuration for Lambda (optional)
+enable_lambda_vpc_access = false
+# lambda_subnet_ids = ["subnet-12345678", "subnet-87654321"]
+
+# Lambda Function URLs (optional - for direct HTTP access)
+enable_lambda_function_urls = false
+
+# CloudWatch Monitoring
+# cloudwatch_alarm_actions = ["arn:aws:sns:us-east-1:123456789012:alerts"]
+
+# IAM MCP Server Configuration
+iam_lambda_memory_size = 256
+iam_max_policy_size = 10240
+iam_max_results_per_query = 100
+iam_enable_policy_simulation = true
+iam_cache_ttl_seconds = 300
+
+# CloudTrail MCP Server Configuration
+cloudtrail_lambda_memory_size = 512
+cloudtrail_max_events_per_query = 50
+cloudtrail_default_time_range_hours = 24
+cloudtrail_max_time_range_days = 90
+cloudtrail_enable_event_filtering = true
+cloudtrail_cache_ttl_seconds = 600

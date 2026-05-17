@@ -34,6 +34,16 @@ For a comprehensive visual representation of the infrastructure, see the [AWS Ar
 ## Quick Start
 
 ```bash
+# Region setup 
+export AWS_DEFAULT_REGION=ap-southeast-2
+export AWS_REGION=ap-southeast-2
+
+# Export AWS credentials for Docker Compose build args
+eval $(aws configure export-credentials --format env --profile agtcore)
+
+# Verify access
+aws sts get-caller-identity
+
 # Initialize Terraform
 terraform init
 

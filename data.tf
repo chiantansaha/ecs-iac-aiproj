@@ -66,7 +66,10 @@ data "aws_route_tables" "private" {
 locals {
   region             = data.aws_region.current.id
   account_id         = data.aws_caller_identity.current.account_id
-  # Use private subnets if found, otherwise use all subnets as fallback
+  # Use public subnets for ECS tasks to ensure internet connectivity for ECR
+  # If no public subnets found, fall back to private subnets (may need VPC endpoints)
+  ecs_subnet_ids     = length(data.aws_subnets.public.ids) > 0 ? data.aws_subnets.public.ids : (length(data.aws_subnets.private.ids) > 0 ? data.aws_subnets.private.ids : data.aws_subnets.all_subnets.ids)
+  # Use private subnets for ALB (internal load balancer)
   private_subnet_ids = length(data.aws_subnets.private.ids) > 0 ? data.aws_subnets.private.ids : data.aws_subnets.all_subnets.ids
   public_subnet_ids  = data.aws_subnets.public.ids
 }

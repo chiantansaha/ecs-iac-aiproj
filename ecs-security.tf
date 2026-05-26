@@ -1,6 +1,6 @@
 # Multi-team frontend security group rules
 resource "aws_security_group_rule" "frontend_egress_https" {
-  for_each = length(local.private_subnet_ids) > 0 ? toset(local.teams) : toset([])
+  for_each = length(local.ecs_subnet_ids) > 0 ? toset(local.teams) : toset([])
 
   type              = "egress"
   from_port         = 443
@@ -11,7 +11,7 @@ resource "aws_security_group_rule" "frontend_egress_https" {
 }
 
 resource "aws_security_group_rule" "frontend_egress_http" {
-  for_each = length(local.private_subnet_ids) > 0 ? toset(local.teams) : toset([])
+  for_each = length(local.ecs_subnet_ids) > 0 ? toset(local.teams) : toset([])
 
   type              = "egress"
   from_port         = 80
@@ -23,7 +23,7 @@ resource "aws_security_group_rule" "frontend_egress_http" {
 
 # Allow ingress from ALB subnet range on application port
 resource "aws_security_group_rule" "frontend_ingress_app" {
-  for_each = length(local.private_subnet_ids) > 0 ? toset(local.teams) : toset([])
+  for_each = length(local.ecs_subnet_ids) > 0 ? toset(local.teams) : toset([])
 
   type              = "ingress"
   from_port         = local.team_ports[each.value].frontend
@@ -35,7 +35,7 @@ resource "aws_security_group_rule" "frontend_ingress_app" {
 
 # Allow frontend to communicate with same-team backend
 resource "aws_security_group_rule" "frontend_egress_to_backend" {
-  for_each = length(local.private_subnet_ids) > 0 ? toset(local.teams) : toset([])
+  for_each = length(local.ecs_subnet_ids) > 0 ? toset(local.teams) : toset([])
 
   type                     = "egress"
   from_port                = local.team_ports[each.value].backend
@@ -47,7 +47,7 @@ resource "aws_security_group_rule" "frontend_egress_to_backend" {
 
 # Multi-team backend security group rules
 resource "aws_security_group_rule" "backend_egress_https" {
-  for_each = length(local.private_subnet_ids) > 0 ? toset(local.teams) : toset([])
+  for_each = length(local.ecs_subnet_ids) > 0 ? toset(local.teams) : toset([])
 
   type              = "egress"
   from_port         = 443
@@ -59,7 +59,7 @@ resource "aws_security_group_rule" "backend_egress_https" {
 
 # Allow only same-team frontend to communicate with backend
 resource "aws_security_group_rule" "backend_ingress_from_frontend" {
-  for_each = length(local.private_subnet_ids) > 0 ? toset(local.teams) : toset([])
+  for_each = length(local.ecs_subnet_ids) > 0 ? toset(local.teams) : toset([])
 
   type                     = "ingress"
   from_port                = local.team_ports[each.value].backend

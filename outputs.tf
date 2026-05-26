@@ -3,6 +3,11 @@ output "teams" {
   value       = local.teams
 }
 
+output "region" {
+  description = "The AWS region"
+  value       = local.region
+}
+
 output "name" {
   description = "The name of the application"
   value       = var.name
@@ -25,22 +30,22 @@ output "ecs_cluster_arns" {
 
 output "frontend_service_names" {
   description = "The names of the frontend services"
-  value       = { for team in local.teams : team => length(local.private_subnet_ids) > 0 ? module.frontend_service[team].name : "not_created" }
+  value       = { for team in local.teams : team => length(local.ecs_subnet_ids) > 0 ? module.frontend_service[team].name : "not_created" }
 }
 
 output "frontend_service_ids" {
   description = "The IDs of the frontend services"
-  value       = { for team in local.teams : team => length(local.private_subnet_ids) > 0 ? module.frontend_service[team].id : "not_created" }
+  value       = { for team in local.teams : team => length(local.ecs_subnet_ids) > 0 ? module.frontend_service[team].id : "not_created" }
 }
 
 output "backend_service_names" {
   description = "The names of the backend services"
-  value       = { for team in local.teams : team => length(local.private_subnet_ids) > 0 ? module.backend_service[team].name : "not_created" }
+  value       = { for team in local.teams : team => length(local.ecs_subnet_ids) > 0 ? module.backend_service[team].name : "not_created" }
 }
 
 output "backend_service_ids" {
   description = "The IDs of the backend services"
-  value       = { for team in local.teams : team => length(local.private_subnet_ids) > 0 ? module.backend_service[team].id : "not_created" }
+  value       = { for team in local.teams : team => length(local.ecs_subnet_ids) > 0 ? module.backend_service[team].id : "not_created" }
 }
 
 output "frontend_ecr_repository_urls" {

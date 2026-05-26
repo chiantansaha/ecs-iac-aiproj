@@ -1,6 +1,6 @@
 # Multi-team Frontend Services
 module "frontend_service" {
-  for_each = length(local.private_subnet_ids) > 0 ? toset(local.teams) : toset([])
+  for_each = length(local.ecs_subnet_ids) > 0 ? toset(local.teams) : toset([])
 
   source  = "terraform-aws-modules/ecs/aws//modules/service"
   version = "~> 6.7.0"
@@ -127,7 +127,7 @@ module "frontend_service" {
     }
   }
 
-  subnet_ids = [local.private_subnet_ids[0]]
+  subnet_ids = [local.ecs_subnet_ids[0]]
 
   tags = merge(local.team_tags[each.value], {
     Type = "frontend"
@@ -136,7 +136,7 @@ module "frontend_service" {
 
 # Multi-team Backend Services
 module "backend_service" {
-  for_each = length(local.private_subnet_ids) > 0 ? toset(local.teams) : toset([])
+  for_each = length(local.ecs_subnet_ids) > 0 ? toset(local.teams) : toset([])
 
   source  = "terraform-aws-modules/ecs/aws//modules/service"
   version = "~> 6.7.0"
@@ -248,7 +248,7 @@ module "backend_service" {
     }
   }
 
-  subnet_ids = [local.private_subnet_ids[0]]
+  subnet_ids = [local.ecs_subnet_ids[0]]
 
   tags = merge(local.team_tags[each.value], {
     Type = "backend"
